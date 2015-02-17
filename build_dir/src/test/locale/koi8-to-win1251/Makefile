@@ -1,0 +1,1 @@
+/home/deepaks/Project/postgresql-9.3.5/src/test/locale/koi8-to-win1251/Makefile

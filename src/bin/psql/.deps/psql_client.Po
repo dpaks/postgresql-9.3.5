@@ -1,0 +1,4 @@
+psql_client.o: psql_client.c \
+ ../../../src/include/invalidation/my_client.h
+
+../../../src/include/invalidation/my_client.h:

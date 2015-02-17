@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+#include "nodes/pg_list.h"          //foreach defined here
+
+
+#define foreach(cell, l)        \
+        for ((cell) = list_head(l); (cell) != NULL; (cell) = lnext(cell))
+
+bool is_select_command(const char *query);
+
+char *skip_comment(char *query);
+
+void extract_table_oid_name(const char *query, const List *rtable);
+
