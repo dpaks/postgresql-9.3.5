@@ -7,14 +7,10 @@
 #define foreach(cell, l)        \
         for ((cell) = list_head(l); (cell) != NULL; (cell) = lnext(cell))
 
-       // #define ereport(elevel, rest)   ereport_domain(elevel, TEXTDOMAIN, rest)
+extern bool is_select_command(const char *query);          //returns true if it is a select command
 
+extern char *skip_comment(const char *query);
 
-bool is_select_command(const char *query);          //returns true if it is a select command
-
-char *skip_comment(const char *query);
-
-void extract_table_oid_name(const char *, const List *, const char *);     //flag = f; (invalidateable)
-                                                                      //flag = t; (cacheable)
+extern void extract_table_oid_name(const char *, const char *, const List *, const char *);
 
 #endif

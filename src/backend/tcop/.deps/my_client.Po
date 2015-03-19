@@ -1,3 +1,57 @@
-my_client.o: my_client.c ../../../src/include/invalidation/my_client.h
+my_client.o: my_client.c ../../../src/include/invalidation/my_client.h \
+ ../../../src/include/invalidation/extract_table_info.h \
+ ../../../src/include/postgres.h ../../../src/include/c.h \
+ ../../../src/include/postgres_ext.h ../../../src/include/pg_config_ext.h \
+ ../../../src/include/pg_config.h ../../../src/include/pg_config_manual.h \
+ ../../../src/include/pg_config_os.h ../../../src/include/port.h \
+ ../../../src/include/utils/elog.h ../../../src/include/utils/errcodes.h \
+ ../../../src/include/utils/palloc.h \
+ ../../../src/include/parser/parsetree.h \
+ ../../../src/include/nodes/parsenodes.h \
+ ../../../src/include/nodes/bitmapset.h \
+ ../../../src/include/nodes/primnodes.h \
+ ../../../src/include/access/attnum.h \
+ ../../../src/include/nodes/pg_list.h ../../../src/include/nodes/nodes.h \
+ ../../../src/include/nodes/value.h
 
 ../../../src/include/invalidation/my_client.h:
+
+../../../src/include/invalidation/extract_table_info.h:
+
+../../../src/include/postgres.h:
+
+../../../src/include/c.h:
+
+../../../src/include/postgres_ext.h:
+
+../../../src/include/pg_config_ext.h:
+
+../../../src/include/pg_config.h:
+
+../../../src/include/pg_config_manual.h:
+
+../../../src/include/pg_config_os.h:
+
+../../../src/include/port.h:
+
+../../../src/include/utils/elog.h:
+
+../../../src/include/utils/errcodes.h:
+
+../../../src/include/utils/palloc.h:
+
+../../../src/include/parser/parsetree.h:
+
+../../../src/include/nodes/parsenodes.h:
+
+../../../src/include/nodes/bitmapset.h:
+
+../../../src/include/nodes/primnodes.h:
+
+../../../src/include/access/attnum.h:
+
+../../../src/include/nodes/pg_list.h:
+
+../../../src/include/nodes/nodes.h:
+
+../../../src/include/nodes/value.h:
