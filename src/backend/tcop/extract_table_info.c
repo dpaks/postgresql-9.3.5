@@ -1,3 +1,28 @@
+/*
+ * FILE: extract_table_info.c
+ * HEADER: invalidation/extract_table_info.h
+ *
+ * Retrieves query info and rtable from Postgres.c and sends it to a client
+ * file which sends it to pqcd. Table OID(s) of a query are extracted from
+ * rtable here.
+ *
+ * Written by Deepak S
+ *
+ * Copyright (c) 2015-Today	Deepak S (in.live.in@live.in)
+ *
+ * Permission to use, copy, modify, and distribute this software and
+ * its documentation for any purpose and without fee is hereby
+ * granted, provided that the above copyright notice appear in all
+ * copies and that both that copyright notice and this permission
+ * notice appear in supporting documentation, and that the name of the
+ * author not be used in advertising or publicity pertaining to
+ * distribution of the software without specific, written prior
+ * permission. The author makes no representations about the
+ * suitability of this software for any purpose.  It is provided "as
+ * is" without express or implied warranty.
+ *
+ */
+
 #include <ctype.h>
 
 #include "invalidation/extract_table_info.h"
@@ -6,7 +31,7 @@
 #define TABLESNO 10     /* Assuming max 10 tables referenced by a query */
 
 /*
- *Checking if it is a select query
+ * Checking if it is a select query
  */
 bool is_select_command(const char *query)
 {
@@ -29,7 +54,7 @@ bool is_select_command(const char *query)
 }
 
 /*
- *Skipping comments of a query
+ * Skipping comments of a query
  */
 char *skip_comment(const char *query)
 {
@@ -54,9 +79,10 @@ char *skip_comment(const char *query)
 }
 
 /*
- *Sending table name, db name, oid(s) and flag to client
+ * Sending table name, db name, oid(s) and flag to client
  */
-void extract_table_oid_name(const char *dbname, const char *query, const List *rtable, const char *flag)
+void extract_table_oid_name(const char *dbname, const char *query,
+                            const List *rtable, const char *flag)
 {
     const ListCell *l;
     int *arr_oids = malloc(sizeof(int) * TABLESNO);
@@ -69,7 +95,7 @@ void extract_table_oid_name(const char *dbname, const char *query, const List *r
         /*
          * User generated tables ahave an oid > 9999
          */
-      //  if ((int)rte->relid > 9999)
+        //  if ((int)rte->relid > 9999)
         {
             arr_oids[i++] = (int)rte->relid;
         }
