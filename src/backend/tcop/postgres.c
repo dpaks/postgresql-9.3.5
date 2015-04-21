@@ -607,7 +607,7 @@ pg_analyze_and_rewrite(Node *parsetree, const char *query_string,
 {
 	Query	   *query;
 	List	   *querytree_list;
-	char *my_flag = (char *)malloc(sizeof(char) * 2);
+	char *my_flag = (char *)malloc(sizeof(char) * 3);
 
 	TRACE_POSTGRESQL_QUERY_REWRITE_START(query_string);
 
