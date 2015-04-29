@@ -623,15 +623,16 @@ pg_analyze_and_rewrite(Node *parsetree, const char *query_string,
 	if (query->commandType == CMD_SELECT)
 	{
         strcpy(my_flag,"t;");
-        //extract_table_oid_name(query_string, query->rtable, my_flag);
-        extract_table_oid_name(dbname_to_send, query_string, query->rtable, my_flag);
+    }
+    else if (query->commandType == CMD_UTILITY)
+    {
+        strcpy(my_flag,"u;");       /* won't be cached */
     }
     else
     {
         strcpy(my_flag,"f;");
-        //extract_table_oid_name(query_string, query->rtable, my_flag);
-        extract_table_oid_name(dbname_to_send, query_string, query->rtable, my_flag);
     }
+    extract_table_oid_name(dbname_to_send, query_string, query->rtable, my_flag);
 
     /************************DEEPAK*******************************************************************/
 

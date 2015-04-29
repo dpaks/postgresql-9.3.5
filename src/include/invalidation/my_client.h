@@ -14,6 +14,6 @@
 
 extern void *get_in_addr(struct sockaddr *sa);
 
-extern void client_main(const char *, const char *,int *, const char *);
+extern void client_main(const char *, const char *,int *, char *);
 
 #endif

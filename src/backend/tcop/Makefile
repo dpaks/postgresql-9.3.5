@@ -7,7 +7,7 @@
 #    src/backend/tcop/Makefile
 #
 #-------------------------------------------------------------------------
-
+CFLAGS=-ggdb
 subdir = src/backend/tcop
 top_builddir = ../../..
 include $(top_builddir)/src/Makefile.global

@@ -9,6 +9,8 @@
 *.dylib
 *.dll
 *.a
+*~
+cscope.*
 *.mo
 objfiles.txt
 .deps/

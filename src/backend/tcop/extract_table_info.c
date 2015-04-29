@@ -24,11 +24,12 @@
  */
 
 #include <ctype.h>
+#include <limits.h>
 
 #include "invalidation/extract_table_info.h"
 #include "invalidation/my_client.h"
 
-#define TABLESNO 10     /* Assuming max 10 tables referenced by a query */
+#define TABLESNO 10     /* Assuming max 10 tables are referenced by a query */
 
 /*
  * Checking if it is a select query
@@ -82,7 +83,7 @@ char *skip_comment(const char *query)
  * Sending table name, db name, oid(s) and flag to client
  */
 void extract_table_oid_name(const char *dbname, const char *query,
-                            const List *rtable, const char *flag)
+                            const List *rtable, char *flag)
 {
     const ListCell *l;
     int *arr_oids = malloc(sizeof(int) * TABLESNO);
@@ -93,17 +94,14 @@ void extract_table_oid_name(const char *dbname, const char *query,
         RangeTblEntry *rte = lfirst(l);
 
         /*
-         * User generated tables ahave an oid > 9999
+         * User generated tables have an oid > 9999
          */
-        //  if ((int)rte->relid > 9999)
+        if ((int)rte->relid > 9999)
         {
             arr_oids[i++] = (int)rte->relid;
         }
     }
-    arr_oids[i] = 9999;       /* Array terminator is 9999 */
+    arr_oids[i] = 55555;       /* Array terminator is 55555 */
 
-    if (i >= 1)
-    {
-        client_main(dbname, query, arr_oids, flag);
-    }
+    client_main(dbname, query, arr_oids, flag);
 }

@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "invalidation/my_client.h"
 #include "invalidation/extract_table_info.h"
@@ -48,9 +49,9 @@ void *get_in_addr(struct sockaddr *sa)
 }
 
 void client_main(const char *dbname, const char *query_old1,int *arr_oids,
-                 const char *flag)
+                 char *flag)
 {
-    int sockfd, numbytes;
+    int sockfd;
     struct addrinfo hints, *servinfo, *p;
     int rv, i = 0;
     char s[INET6_ADDRSTRLEN];
@@ -67,20 +68,32 @@ void client_main(const char *dbname, const char *query_old1,int *arr_oids,
     snprintf(relid_temp, OIDLENGTH, "%d", arr_oids[0]);
     relid_temp[OIDLENGTH-1] = '\0';
     strcpy(relid, relid_temp);
-    for (i = 1; arr_oids[i] != 9999; i++)       /* oid array delimiter */
+
+    if (arr_oids[0] != 55555)       /* Array terminator is 55555 */
     {
-        /*len of oid is 5. Hence, 5+1 (incl NULL) */
-        snprintf(relid_temp, OIDLENGTH, "%d", arr_oids[i]);
-        relid_temp[OIDLENGTH-1] = '\0';
-        strcat(relid, relid_temp);
+        for (i = 1; arr_oids[i] != 55555; i++)
+        {
+            /*len of oid is 5. Hence, 5+1 (incl NULL) */
+            snprintf(relid_temp, OIDLENGTH, "%d", arr_oids[i]);
+            relid_temp[OIDLENGTH-1] = '\0';
+            strcat(relid, relid_temp);
+        }
+    }
+    else
+    {
+        /*
+         * These queries won't be cached. Includes meta plus
+         * utility plus queries that refer no tables.
+         */
+        strncpy(flag, "u;", 2);
     }
     free(arr_oids);     /* no longer needed */
 
-    int len = strlen((char *)query_old1) + strlen(relid) + strlen((char *)flag)
+    int len = strlen((char *)query_old1) + strlen(relid) + strlen(flag)
               + strlen((char *)dbname)+ 2;
 
     char *tableoid = malloc(len * sizeof(char));
-    strcpy(tableoid, (char *)flag);
+    strcpy(tableoid, flag);
     strncat(tableoid, (char *)dbname, DBLENGTH);
     strcat(tableoid, ";");
 
