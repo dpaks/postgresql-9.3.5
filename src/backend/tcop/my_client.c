@@ -29,9 +29,10 @@
 #include "invalidation/extract_table_info.h"
 
 #define PORT "3490"         /* the port client will be connecting to */
-#define MAXDATASIZE 250     /* max query size */
+#define MAXDATASIZE 251     /* max query size incl NULL*/
 #define DBLENGTH 20
 #define OIDLENGTH 6
+#define BUFFSIZE 1000
 
 /* Defined in extract_table_info.c too. Changes to be in sync */
 #define TABLESNO 10
@@ -48,15 +49,25 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-void client_main(const char *dbname, const char *query_old1,int *arr_oids,
+void client_main(const char *dbname, const char *query_old2,int *arr_oids,
                  char *flag)
 {
     int sockfd;
     struct addrinfo hints, *servinfo, *p;
     int rv, i = 0;
+    char *query_old1, *query_old1_for_freeing;
     char s[INET6_ADDRSTRLEN];
     char relid[TOTOIDLENGTH] = "";
     char relid_temp[OIDLENGTH] = "";
+
+    query_old1 = malloc(sizeof(char) * MAXDATASIZE);
+    query_old1_for_freeing = query_old1;
+    strncpy(query_old1, (char *)query_old2, MAXDATASIZE);
+    if (strlen(query_old1) == (MAXDATASIZE-1))
+    {
+        query_old1[MAXDATASIZE-1] = '\0';
+        query_old1[MAXDATASIZE-2] = ';';
+    }
 
     if (strncmp("/* cache:off */", query_old1, 15) == 0)
     {
@@ -89,8 +100,7 @@ void client_main(const char *dbname, const char *query_old1,int *arr_oids,
     }
     free(arr_oids);     /* no longer needed */
 
-    int len = strlen((char *)query_old1) + strlen(relid) + strlen(flag)
-              + strlen((char *)dbname)+ 2;
+    int len = BUFFSIZE-1;
 
     char *tableoid = malloc(len * sizeof(char));
     strcpy(tableoid, flag);
@@ -102,7 +112,7 @@ void client_main(const char *dbname, const char *query_old1,int *arr_oids,
      * max size of 250 chars inclusive of NULL
      */
     strncat(tableoid, (char *)query_old1, (MAXDATASIZE-1));
-    if ( strlen(((char *)query_old1)) > (MAXDATASIZE-1))
+    if (tableoid[strlen(tableoid)-1] != ';')
     {
         strcat(tableoid, ";");
     }
@@ -155,6 +165,7 @@ void client_main(const char *dbname, const char *query_old1,int *arr_oids,
         perror("send");
 
     free(tableoid);
+    free(query_old1_for_freeing);
     close(sockfd);
 
     return;
